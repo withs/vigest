@@ -3,11 +3,12 @@ name: CI
 # credit: https://github.com/vlang/vsl/blob/master/.github/workflows/ci.yml
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
     branches: [main]
+
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,10 +22,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup V
-        uses: vlang/setup-v@v1
-        with:
-          check-latest: true
+      - name: Build V and symlink
+        run: |
+          cd ..
+          git clone https://github.com/vlang/v.git --depth 1 v
+          cd v
+          make
+          ./v symlink -githubci
 
       - name: V doctor
         run: v doctor
