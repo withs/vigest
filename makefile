@@ -7,7 +7,7 @@ deb:
 debc:
 	v . -o deb.c
 
-prd:
+prod:
 	v -prod -shared .
 
 test:
