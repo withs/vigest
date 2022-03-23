@@ -1,7 +1,7 @@
 Module {
 	name: 'vigest_auth'
 	description: 'Digest authentification for v'
-	version: '0.0.3'
+	version: '0.0.4'
 	license: 'MIT'
 	dependencies: []
 }
