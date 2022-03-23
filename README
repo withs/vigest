@@ -1,0 +1,36 @@
+vigest auth
+===========
+
+Description
+-----------
+
+    Vigest auth attempt to implement digest authentification in v.
+
+
+Features
+--------
+
+    - Support multiple hash algorithm (MD5, SHA-256, SHA-512-256 and all 3 with sess)
+    - multiple quality of protection
+
+Know issues
+-----------
+
+    - might not work on some endpoint due to v.http wich only support connection close header
+
+Docs
+----
+
+    ->  https://withs.github.io/vigest_auth/
+
+Build & Use
+-----------
+
+    1. v install --git https://github.com/withs/vigest
+
+
+Ressources
+-----------
+    - https://en.wikipedia.org/wiki/Digest_access_authentication
+    - https://datatracker.ietf.org/doc/html/rfc2617
+    - https://datatracker.ietf.org/doc/html/rfc2069
