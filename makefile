@@ -20,7 +20,7 @@ fmt:
 	v fmt -w .
 
 doc:
-	rm -r docs && v doc -f html -o . -inline-assets -m . && mv _docs docs
+	rm -r docs && v doc -f html -o . -inline-assets -m . && mv _docs docs && mv docs/vigest_auth.html docs/index.html
 
 install:
-	rm -r ~/.vmodules/digest_authentification && mkdir ~/.vmodules/digest_authentification && cp -r * ~/.vmodules/digest_authentification
+	rm -r ~/.vmodules/vigest_auth && mkdir ~/.vmodules/vigest_auth && cp -r * ~/.vmodules/vigest_auth
