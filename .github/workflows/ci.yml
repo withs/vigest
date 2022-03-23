@@ -16,7 +16,16 @@ jobs:
 
     strategy:
       matrix:
-        os: ["ubuntu-20.04", "macos-latest", "windows-latest"]
+        os:
+          - name: ubuntu-latest
+            make: make
+            bin: ./v
+          - name: macos-latest
+            make: make
+            bin: ./v
+          - name: windows-latest
+            make: .\make.bat
+            bin: ./v.exe
 
     steps:
       - name: Build V and symlink
