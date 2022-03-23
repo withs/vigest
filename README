@@ -4,7 +4,7 @@ vigest auth
 Description
 -----------
 
-    Vigest auth is an attempt to implement digest authentification in v.
+    Vigest auth is an attempt to implement digest client side authentification in v.
 
 
 Features
