@@ -8,6 +8,7 @@ import crypto.rand
 import crypto.sha256
 import crypto.sha512
 
+// Represent a hash method used in digest auth.
 pub enum HashMethod {
 	md5
 	md5_sess
@@ -18,6 +19,12 @@ pub enum HashMethod {
 	unknown
 }
 
+// Return a string which represent a hash method from enum value.
+// Example:
+// ```v
+// enum_hash := HashMethod.md5
+// str_hash := enum_hash.str()
+// ```
 pub fn (h HashMethod) str() string {
 	match h {
 		.md5 { return 'MD5' }
@@ -30,6 +37,12 @@ pub fn (h HashMethod) str() string {
 	}
 }
 
+// Retrurn a HashMethod enum value from a given string.
+// Example:
+// ```v
+// str_hash := "MD5-sess"
+// enum_hash := hash_method_from_str(str_hash)
+// ```
 pub fn hash_method_from_str(withValue string) HashMethod {
 	match withValue {
 		'MD5-sess' { return .md5_sess }
@@ -42,12 +55,19 @@ pub fn hash_method_from_str(withValue string) HashMethod {
 	}
 }
 
+// Respresent a quality of prodtection used in digest auth.
 pub enum Qop {
 	auth
 	auth_int
 	unknown
 }
 
+// Return a string which represent a qop from enum value.
+// Example:
+// ```v
+// enum_qop := Qup.auth
+// str_qop := enum_qop.str()
+// ```
 pub fn (q Qop) str() string {
 	match q {
 		.auth { return 'auth' }
@@ -56,6 +76,12 @@ pub fn (q Qop) str() string {
 	}
 }
 
+// Retrurn a qop enum value from a given string.
+// Example:
+// ```v
+// str_qop := "auth"
+// enum_qop := qop_from_str(str_qop)
+// ```
 pub fn qop_from_str(withValue string) Qop {
 	match withValue {
 		'auth' { return .auth }
@@ -64,6 +90,7 @@ pub fn qop_from_str(withValue string) Qop {
 	}
 }
 
+// Main struct which contains data for the requests.
 pub struct DigestAuthentification {
 pub mut:
 	username    string
@@ -81,6 +108,7 @@ pub mut:
 	cnonce    string
 }
 
+// Control if the required field to perforn the minimal digest auth is present after the challenge request.
 fn (d DigestAuthentification) have_required_fields() bool {
 	if d.algorithm == .unknown || d.realm.len == 0 || d.nonce.len == 0 {
 		return false
@@ -88,8 +116,8 @@ fn (d DigestAuthentification) have_required_fields() bool {
 	return true
 }
 
+// Return a hex hashed based with the desired hash method for a given string.
 fn (d DigestAuthentification) hash(withValue string) string {
-	// dump(withValue)
 	match d.algorithm {
 		.md5 {
 			return md5.hexhash(withValue)
@@ -115,10 +143,9 @@ fn (d DigestAuthentification) hash(withValue string) string {
 	}
 }
 
+// Parse the www_authenticate header field and fill the DigestAuthentification with value returned by the challenge request.
 fn (mut d DigestAuthentification) parse_www_authentificate_header(withValue string) {
-
-	a := 'Digest qop="auth",algorithm=MD5,realm="monero-rpc",nonce="mXGqDmo9MY6hFgDK0kT/sw==",stale=true'
-	without_digest := a.all_after('Digest ')
+	without_digest := withValue.all_after('Digest ')
 	raw_fields := without_digest.split(',')
 	fields := raw_fields.map(fn (s string) []string {
 		mut parsed_res := []string{}
@@ -158,11 +185,13 @@ fn (mut d DigestAuthentification) parse_www_authentificate_header(withValue stri
 	}
 }
 
+// Return a client nonce.
 fn (mut d DigestAuthentification) generate_cnonce() {
 	// FIXME: Not very secure ^^
 	d.cnonce = base64.encode_str(md5.hexhash(rand.int_u64(667670123) or { 1 }.str()))
 }
 
+// Try to solve the challenge and return the formated authorization header field
 fn (mut d DigestAuthentification) build_challenge_solution() ?string {
 	if d.qop != .unknown {
 		d.generate_cnonce()
@@ -222,9 +251,20 @@ fn (mut d DigestAuthentification) build_challenge_solution() ?string {
 	return auth
 }
 
+// Fetch from an endpoint which require a digest auth.
+// Example:
+// ```v
+// mut config := http.FetchConfig{
+// 	url: 'https://httpbin.org/digest-auth/auth/user/pass/MD5'
+// 	method: .get
+// }
+//
+// mut d_auth := new_digest_authentification('user', 'pass', config) or { return }
+// mut rsp := d_auth.fetch() or { panic('$err') }
+// ```
 pub fn (mut d DigestAuthentification) fetch() ?http.Response {
 	d.request.header.delete(.connection)
-	d.request.header.add(.connection, "Keep-Alive")
+	d.request.header.add(.connection, 'Keep-Alive')
 
 	req_challenge := http.fetch(d.request) or {
 		return error('Error while reqesting auth challenge: $err')
@@ -257,15 +297,25 @@ pub fn (mut d DigestAuthentification) fetch() ?http.Response {
 	}
 
 	d.request.header.add(.authorization, challenge_solution)
-/*
+	/*
 	// retrying request with solution
 	resp := http.fetch(d.request) or {
 		return error('Error while proceeding request with solution: $err')
 	}
-*/
+	*/
 	return none
 }
 
+// Return a DigestAuthentification used to fetch from a digest auth protected endpoint
+// Example:
+// ```v
+// mut config := http.FetchConfig{
+// 	url: 'https://httpbin.org/digest-auth/auth/user/pass/MD5'
+// 	method: .get
+// }
+//
+// mut d_auth := new_digest_authentification('user', 'pass', config) or { return }
+// ```
 pub fn new_digest_authentification(withUsername string, andPassword string, forFetchConfig http.FetchConfig) ?DigestAuthentification {
 	mut d_auth := DigestAuthentification{
 		username: withUsername

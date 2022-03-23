@@ -957,7 +957,7 @@ template {
           <div class="info">
             <div class="module">vigest_auth</div>
             <div class="toggle-version-container">
-              <span>0.0.1 1d83ab6</span>
+              <span>0.0.3 1d83ab6</span>
               <div id="dark-mode-toggle" role="switch" aria-checked="false" aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" class="light-icon" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg>
 <svg xmlns="http://www.w3.org/2000/svg" class="dark-icon" enable-background="new 0 0 24 24" height="24" viewBox="0 0 24 24" width="24"><g><rect fill="none" height="24" width="24"/></g><g><g><g><path d="M11.1,12.08C8.77,7.57,10.6,3.6,11.63,2.01C6.27,2.2,1.98,6.59,1.98,12c0,0.14,0.02,0.28,0.02,0.42 C2.62,12.15,3.29,12,4,12c1.66,0,3.18,0.83,4.1,2.15C9.77,14.63,11,16.17,11,18c0,1.52-0.87,2.83-2.12,3.51 c0.98,0.32,2.03,0.5,3.11,0.5c3.5,0,6.58-1.8,8.37-4.52C18,17.72,13.38,16.52,11.1,12.08z"/></g><path d="M7,16l-0.18,0C6.4,14.84,5.3,14,4,14c-1.66,0-3,1.34-3,3s1.34,3,3,3c0.62,0,2.49,0,3,0c1.1,0,2-0.9,2-2 C9,16.9,8.1,16,7,16z"/></g></g></svg>
 </div>
@@ -985,17 +985,32 @@ template {
 
 						<section id="hash_method_from_str" class="doc-node">
 							<div class="title"><h2>fn hash_method_from_str <a href="#hash_method_from_str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">hash_method_from_str</span><span class="token punctuation">(</span>withValue <span class="token builtin">string</span><span class="token punctuation">)</span> HashMethod</code></pre>
-
+<p>Retrurn a HashMethod enum value from a given string.<br>
+Example:</p>
+<pre><code class="language-v">str_hash := &quot;MD5-sess&quot;
+enum_hash := hash_method_from_str(str_hash)
+</code></pre>
 
 </section>
 						<section id="new_digest_authentification" class="doc-node">
 							<div class="title"><h2>fn new_digest_authentification <a href="#new_digest_authentification">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">new_digest_authentification</span><span class="token punctuation">(</span>withUsername <span class="token builtin">string</span><span class="token punctuation">,</span> andPassword <span class="token builtin">string</span><span class="token punctuation">,</span> forFetchConfig http<span class="token punctuation">.</span>FetchConfig<span class="token punctuation">)</span> ?DigestAuthentification</code></pre>
+<p>Return a DigestAuthentification used to fetch from a digest auth protected endpoint Example:</p>
+<pre><code class="language-v">mut config := http.FetchConfig{
+    url: 'https://httpbin.org/digest-auth/auth/user/pass/MD5'
+    method: .get
+}
 
+mut d_auth := new_digest_authentification('user', 'pass', config) or { return }
+</code></pre>
 
 </section>
 						<section id="qop_from_str" class="doc-node">
 							<div class="title"><h2>fn qop_from_str <a href="#qop_from_str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">qop_from_str</span><span class="token punctuation">(</span>withValue <span class="token builtin">string</span><span class="token punctuation">)</span> Qop</code></pre>
-
+<p>Retrurn a qop enum value from a given string.<br>
+Example:</p>
+<pre><code class="language-v">str_qop := &quot;auth&quot;
+enum_qop := qop_from_str(str_qop)
+</code></pre>
 
 </section>
 						<section id="HashMethod" class="doc-node">
@@ -1008,12 +1023,16 @@ template {
 	sha512_256_sess
 	unknown
 <span class="token punctuation">}</span></code></pre>
-
+<p>Represent a hash method used in digest auth.</p>
 
 </section>
 						<section id="HashMethod.str" class="doc-node">
 							<div class="title"><h2>fn (HashMethod) str <a href="#HashMethod.str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>h HashMethod<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
-
+<p>Return a string which represent a hash method from enum value.<br>
+Example:</p>
+<pre><code class="language-v">enum_hash := HashMethod.md5
+str_hash := enum_hash.str()
+</code></pre>
 
 </section>
 						<section id="Qop" class="doc-node">
@@ -1022,12 +1041,16 @@ template {
 	auth_int
 	unknown
 <span class="token punctuation">}</span></code></pre>
-
+<p>Respresent a quality of prodtection used in digest auth.</p>
 
 </section>
 						<section id="Qop.str" class="doc-node">
 							<div class="title"><h2>fn (Qop) str <a href="#Qop.str">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>q Qop<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
-
+<p>Return a string which represent a qop from enum value.<br>
+Example:</p>
+<pre><code class="language-v">enum_qop := Qup.auth
+str_qop := enum_qop.str()
+</code></pre>
 
 </section>
 						<section id="DigestAuthentification" class="doc-node">
@@ -1047,17 +1070,26 @@ template {
 	nc        <span class="token builtin">int</span>
 	cnonce    <span class="token builtin">string</span>
 <span class="token punctuation">}</span></code></pre>
-
+<p>Main struct which contains data for the requests.</p>
 
 </section>
 						<section id="DigestAuthentification.fetch" class="doc-node">
 							<div class="title"><h2>fn (DigestAuthentification) fetch <a href="#DigestAuthentification.fetch">#</a></h2></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> d DigestAuthentification<span class="token punctuation">)</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> ?http<span class="token punctuation">.</span>Response</code></pre>
+<p>Fetch from an endpoint which require a digest auth.<br>
+Example:</p>
+<pre><code class="language-v">mut config := http.FetchConfig{
+    url: 'https://httpbin.org/digest-auth/auth/user/pass/MD5'
+    method: .get
+}
 
+mut d_auth := new_digest_authentification('user', 'pass', config) or { return }
+mut rsp := d_auth.fetch() or { panic('$err') }
+</code></pre>
 
 </section>
 
           <div class="footer">
-            Powered by vdoc. Generated on: 23 Mar 2022 14:27:30
+            Powered by vdoc. Generated on: 23 Mar 2022 15:36:53
           </div>
         </div>
         
