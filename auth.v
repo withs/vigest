@@ -247,7 +247,6 @@ fn (mut d DigestAuthentification) build_challenge_solution() ?string {
 
 	// always present but it dont have the "," at the end
 	auth += 'algorithm=$d.algorithm.str()'
-	dump(auth)
 	return auth
 }
 
@@ -297,13 +296,13 @@ pub fn (mut d DigestAuthentification) fetch() ?http.Response {
 	}
 
 	d.request.header.add(.authorization, challenge_solution)
-	/*
+
 	// retrying request with solution
 	resp := http.fetch(d.request) or {
 		return error('Error while proceeding request with solution: $err')
 	}
-	*/
-	return none
+
+	return resp
 }
 
 // Return a DigestAuthentification used to fetch from a digest auth protected endpoint
