@@ -7,11 +7,8 @@ deb:
 debc:
 	v . -o deb.c
 
-rprd:
-	v -prod run .
-
 prd:
-	v -prod .
+	v -prod -shared .
 
 test:
 	v -stats test .
