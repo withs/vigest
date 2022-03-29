@@ -3,13 +3,10 @@ name: CI
 # credit: https://github.com/vlang/vsl/blob/master/.github/workflows/ci.yml
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
   workflow_dispatch:
-
+  push:
+    branches:
+      - master
 jobs:
   build:
     runs-on: ${{ matrix.os }}
