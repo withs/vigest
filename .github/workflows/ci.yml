@@ -2,7 +2,18 @@ name: CI
 
 # credit: https://github.com/vlang/vsl/blob/master/.github/workflows/ci.yml
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - development
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: string
+        default: DEV
+        required: true
+
 
 jobs:
   build:
